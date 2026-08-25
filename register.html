@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create account · Investor Workspace</title><link rel="stylesheet" href="/styles.css"></head>
+<body class="auth-body">
+  <div class="auth-card">
+    <a class="brand" href="/"><span class="brand-mark">↗</span><span>ZIIDI <b>INVESTOR</b></span></a>
+    <h1>Create your account</h1><p>Use your own details. Do not share your password.</p>
+    <form id="registerForm">
+      <label>Full name<input name="fullName" autocomplete="name" required></label>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>M-PESA phone<input name="phone" inputmode="tel" placeholder="07XXXXXXXX" required></label>
+      <label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+      <label class="check"><input name="agree" type="checkbox" required> I understand this is an independent software platform and not automatically an official Safaricom/Ziidi service.</label>
+      <button class="btn btn-green btn-large full" type="submit">Create account</button>
+      <div id="message" class="message"></div>
+    </form>
+    <p class="auth-foot">Already registered? <a href="/login.html">Sign in</a></p>
+  </div>
+  <script src="/auth.js"></script>
+</body>
+</html>

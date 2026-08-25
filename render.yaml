@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: ziidi-investor-workspace
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: ENABLE_PAYMENTS
+        value: "false"
+      - key: DARAJA_ENV
+        value: sandbox
+      - key: DARAJA_CONSUMER_KEY
+        sync: false
+      - key: DARAJA_CONSUMER_SECRET
+        sync: false
+      - key: DARAJA_SHORTCODE
+        sync: false
+      - key: DARAJA_PASSKEY
+        sync: false
+      - key: DARAJA_CALLBACK_URL
+        sync: false
+      - key: DARAJA_TRANSACTION_TYPE
+        value: CustomerPayBillOnline

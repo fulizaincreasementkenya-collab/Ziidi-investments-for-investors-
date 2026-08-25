@@ -1,0 +1,49 @@
+CREATE TABLE IF NOT EXISTS users (
+  id BIGSERIAL PRIMARY KEY,
+  full_name VARCHAR(120) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type VARCHAR(30) NOT NULL CHECK (type IN ('DEPOSIT','WITHDRAWAL','INVESTMENT','REFUND')),
+  status VARCHAR(30) NOT NULL CHECK (status IN ('PENDING','COMPLETED','FAILED','CANCELLED')),
+  amount NUMERIC(18,2) NOT NULL CHECK (amount > 0),
+  currency CHAR(3) NOT NULL DEFAULT 'KES',
+  provider VARCHAR(50),
+  provider_reference VARCHAR(120),
+  checkout_request_id VARCHAR(120),
+  description TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_transactions_checkout
+ON transactions(checkout_request_id)
+WHERE checkout_request_id IS NOT NULL;
+
+CREATE TABLE IF NOT EXISTS holdings (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  asset_code VARCHAR(40) NOT NULL,
+  asset_name VARCHAR(160) NOT NULL,
+  quantity NUMERIC(24,8) NOT NULL DEFAULT 0,
+  average_cost NUMERIC(18,4) NOT NULL DEFAULT 0,
+  currency CHAR(3) NOT NULL DEFAULT 'KES',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(user_id, asset_code)
+);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  action VARCHAR(80) NOT NULL,
+  ip_address INET,
+  metadata JSONB,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
